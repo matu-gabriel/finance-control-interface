@@ -3,6 +3,7 @@ import { Button } from "../../components/button";
 import { Input } from "../../components/input";
 import { Title } from "../../components/title";
 import {
+  Aside,
   Balance,
   ChartAction,
   ChartContainer,
@@ -11,6 +12,7 @@ import {
   Header,
   InputGroup,
   Main,
+  SearchTransaction,
   Section,
 } from "./styles";
 import { ButtonIncon } from "../../components/button-icon";
@@ -68,7 +70,7 @@ export function Home() {
             <header>
               <Title
                 title="Evolução financeira"
-                subtitle="Saldo, receitas e gastos no ano"
+                subtitle="Saldo, Receitas e Gastos no ano"
               />
               <ChartAction>
                 <InputMask
@@ -85,6 +87,15 @@ export function Home() {
             <ChartContent></ChartContent>
           </ChartContainer>
         </Section>
+        <Aside>
+          <header>
+            <Title title="Transações" subtitle="Receita e Gastos no período" />
+            <SearchTransaction>
+              <Input variant="black" placeholder="Procurar transação" />
+              <ButtonIncon />
+            </SearchTransaction>
+          </header>
+        </Aside>
       </Main>
     </>
   );
