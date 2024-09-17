@@ -17,6 +17,7 @@ import {
 } from "./styles";
 import { ButtonIncon } from "../../components/button-icon";
 import { Card } from "../../components/card";
+import { Transaction } from "../../components/transaction";
 
 export function Home() {
   return (
@@ -94,6 +95,34 @@ export function Home() {
               <Input variant="black" placeholder="Procurar transação" />
               <ButtonIncon />
             </SearchTransaction>
+            <Transaction
+              id={1}
+              title="Mercado"
+              amount={20000}
+              date="09/09/2024"
+              category={{ title: "Alimentação", color: "#0f0f" }}
+            />
+            <Transaction
+              id={1}
+              title="Mercado"
+              amount={20000}
+              date="09/09/2024"
+              category={{ title: "Alimentação", color: "#0f0f" }}
+            />
+            <Transaction
+              id={1}
+              title="Mercado"
+              amount={20000}
+              date="09/09/2024"
+              category={{ title: "Alimentação", color: "#0f0f" }}
+            />
+            <Transaction
+              id={1}
+              title="Mercado"
+              amount={20000}
+              date="09/09/2024"
+              category={{ title: "Alimentação", color: "#0f0f" }}
+            />
           </header>
         </Aside>
       </Main>
