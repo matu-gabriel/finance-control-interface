@@ -19,7 +19,7 @@ import {
 import { ButtonIncon } from "../../components/button-icon";
 import { Card } from "../../components/card";
 import { Transaction } from "../../components/transaction";
-import { Dialog } from "../../components/dialog";
+import { CreateCategoryDialog } from "../../components/create-category-dialog";
 
 export function Home() {
   return (
@@ -27,9 +27,8 @@ export function Home() {
       <Header>
         <h1>Finance control</h1>
         <div>
-          {/* <Button>Nova transação</Button> */}
-          <Dialog trigger={<Button>Nova transação</Button>}>Ola</Dialog>
-          <Button>Nova categoria</Button>
+          <Button>Nova transação</Button>
+          <CreateCategoryDialog />
         </div>
       </Header>
       <Main>
