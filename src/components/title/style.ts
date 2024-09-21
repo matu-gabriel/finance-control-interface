@@ -7,13 +7,13 @@ export const Container = styled.div`
   gap: 0.375rem;
 
   h2 {
-    font-size: 1.25rem;
+    font-size: 1.26rem;
     color: ${theme.colors.white};
     font-weight: 700;
   }
 
   span {
-    font-size: 0.875rem;
+    font-size: 0.9rem;
     color: ${theme.colors.light};
     font-weight: 400;
   }
