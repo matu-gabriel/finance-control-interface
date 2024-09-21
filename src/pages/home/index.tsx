@@ -1,5 +1,4 @@
 import { InputMask } from "@react-input/mask";
-import { Button } from "../../components/button";
 import { Input } from "../../components/input";
 import { Title } from "../../components/title";
 import {
@@ -20,6 +19,7 @@ import { ButtonIncon } from "../../components/button-icon";
 import { Card } from "../../components/card";
 import { Transaction } from "../../components/transaction";
 import { CreateCategoryDialog } from "../../components/create-category-dialog";
+import { CreateTransactionDialog } from "../../components/create-transaction-dialog";
 
 export function Home() {
   return (
@@ -27,7 +27,7 @@ export function Home() {
       <Header>
         <h1>Finance control</h1>
         <div>
-          <Button>Nova transação</Button>
+          <CreateTransactionDialog />
           <CreateCategoryDialog />
         </div>
       </Header>
