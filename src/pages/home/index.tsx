@@ -20,12 +20,13 @@ import { Card } from "../../components/card";
 import { Transaction } from "../../components/transaction";
 import { CreateCategoryDialog } from "../../components/create-category-dialog";
 import { CreateTransactionDialog } from "../../components/create-transaction-dialog";
+import { Logo } from "../../components/logo";
 
 export function Home() {
   return (
     <>
       <Header>
-        <h1>Finance control</h1>
+        <Logo />
         <div>
           <CreateTransactionDialog />
           <CreateCategoryDialog />
