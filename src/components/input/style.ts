@@ -30,7 +30,7 @@ export const Container = styled.div<ContainerProps>`
     background-color: ${(props) => theme.colors[props.$variant]};
     outline: none;
     border-radius: 0.25rem;
-    padding: 0 2.5rem 0 ${(props) => (props.hasIcon ? "2.5rem" : "0.75rem")};
+    padding: 0 ${(props) => (props.hasIcon ? "2.5rem" : "0.75rem")};
     color: ${theme.colors.light};
     font-size: 1rem;
     width: 100%;
