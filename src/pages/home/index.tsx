@@ -21,6 +21,7 @@ import { Transaction } from "../../components/transaction";
 import { CreateCategoryDialog } from "../../components/create-category-dialog";
 import { CreateTransactionDialog } from "../../components/create-transaction-dialog";
 import { Logo } from "../../components/logo";
+import { CategoriesChart } from "../../components/categories-chart";
 
 export function Home() {
   return (
@@ -68,7 +69,9 @@ export function Home() {
                 subtitle="Despesas por categorias no período"
               />
             </header>
-            <ChartContent></ChartContent>
+            <ChartContent>
+              <CategoriesChart />
+            </ChartContent>
           </ChartContainer>
           <ChartContainer>
             <header>
