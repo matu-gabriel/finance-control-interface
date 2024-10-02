@@ -22,6 +22,7 @@ import { CreateCategoryDialog } from "../../components/create-category-dialog";
 import { CreateTransactionDialog } from "../../components/create-transaction-dialog";
 import { Logo } from "../../components/logo";
 import { CategoriesChart } from "../../components/categories-chart";
+import { FinancialEvolutionBar } from "../../components/financial-evolution-bar";
 
 export function Home() {
   return (
@@ -91,7 +92,9 @@ export function Home() {
                 <ButtonIncon />
               </ChartAction>
             </header>
-            <ChartContent></ChartContent>
+            <ChartContent>
+              <FinancialEvolutionBar />
+            </ChartContent>
           </ChartContainer>
         </Section>
         <Aside>
