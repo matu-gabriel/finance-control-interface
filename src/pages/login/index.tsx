@@ -8,7 +8,7 @@ import Logo from "../../assets/logoLogin.png";
 export function Login() {
   return (
     <Container>
-      <img src={Logo} alt="" />
+      <img src={Logo} alt="Logo" style={{ height: "300px" }} />
       <ContainerForm>
         <Title
           title="Login"

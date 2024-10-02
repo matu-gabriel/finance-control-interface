@@ -8,7 +8,7 @@ export const Container = styled.div`
   text-align: center;
   padding: 1rem;
   justify-content: center;
-  margin: 14% auto;
+  margin: 5% auto;
   width: 100%;
   max-width: 45%;
   background-color: ${theme.colors.dark};
