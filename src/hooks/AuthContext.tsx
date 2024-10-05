@@ -1,18 +1,62 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 type AuthContextType = {
   isAuthenticated: boolean;
-  login: () => void;
+  login: (email: string, password: string) => Promise<void>;
   logout: () => void;
 };
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [isAuthenticated, setisAuthenticated] = useState(false);
+type AuthPrioviderProps = {
+  children: ReactNode;
+};
 
-  const login = () => setisAuthenticated(true);
-  const logout = () => setisAuthenticated(false);
+export const AuthProvider = ({ children }: AuthPrioviderProps) => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    const userData = localStorage.getItem("userData");
+    return !!userData;
+  });
+
+  useEffect(() => {
+    const userData = localStorage.getItem("userData");
+    if (userData) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  const login = async (email: string, password: string) => {
+    const response = await fetch("http://localhost:3000/session", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro no login");
+    }
+
+    const data = await response.json();
+
+    // Armazena o token JWT no localStorage para futuras requisições
+    localStorage.setItem("userData", JSON.stringify(data));
+
+    // Atualiza o estado para indicar que o usuário está autenticado
+    setIsAuthenticated(true);
+  };
+
+  const logout = async () => {
+    await localStorage.removeItem("userData");
+    setIsAuthenticated(false);
+  };
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout }}>

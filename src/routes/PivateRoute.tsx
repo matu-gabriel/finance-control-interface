@@ -7,6 +7,11 @@ type ElementType = {
 
 export const PrivateRoute = ({ element }: ElementType) => {
   const { isAuthenticated } = useAuth();
+  const userData = localStorage.getItem("userData");
 
-  return isAuthenticated ? element : <Navigate to="/login" />;
+  if (!isAuthenticated && !userData) {
+    return <Navigate to="/login" />;
+  }
+
+  return element;
 };
