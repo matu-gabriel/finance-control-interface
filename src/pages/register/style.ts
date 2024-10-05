@@ -23,7 +23,7 @@ export const Container = styled.div`
 
   p {
     color: ${theme.colors.light};
-    margin: 2rem 0;
+    /* margin: 2rem 0; */
   }
 `;
 

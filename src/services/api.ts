@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Category, CreateCategory } from "./api-types";
+import { CreateUserData } from "../validators/types";
 
 export class APIService {
   private static client = axios.create({
@@ -21,5 +22,10 @@ export class APIService {
     const { data } = await APIService.client.get<Category[]>("/categories");
 
     return data;
+  }
+
+  // Função de registro
+  static async register(registerData: CreateUserData): Promise<void> {
+    await APIService.client.post("/user", registerData);
   }
 }
