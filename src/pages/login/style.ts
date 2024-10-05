@@ -29,7 +29,6 @@ export const ContainerForm = styled.div`
 
   p {
     color: ${theme.colors.light};
-    margin: 1rem 0;
   }
 `;
 
