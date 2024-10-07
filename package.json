@@ -17,6 +17,7 @@
     "@radix-ui/react-dialog": "^1.1.1",
     "@react-input/mask": "^1.2.8",
     "@react-input/number-format": "^1.0.31",
+    "@react-oauth/google": "^0.12.1",
     "@types/react-router-dom": "^5.3.3",
     "@types/styled-components": "^5.1.34",
     "axios": "^1.7.7",

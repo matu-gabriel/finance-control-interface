@@ -26,7 +26,6 @@ export function Register() {
 
   const onSubmit = async (data: CreateUserData) => {
     try {
-      console.log("Dados inviados: ", data);
       await APIService.register(data);
       navigate("/login");
     } catch (error) {

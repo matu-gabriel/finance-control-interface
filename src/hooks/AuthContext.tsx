@@ -9,6 +9,7 @@ import {
 type AuthContextType = {
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
+  googleLogin: (googleToken: string) => Promise<void>;
   logout: () => void;
 };
 
@@ -58,8 +59,32 @@ export const AuthProvider = ({ children }: AuthPrioviderProps) => {
     setIsAuthenticated(false);
   };
 
+  const googleLogin = async (googleToken: string) => {
+    const response = await fetch("http://localhost:3000/session-google", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token: googleToken }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro ao logar com Google");
+    }
+
+    const data = await response.json();
+
+    // Armazena o token JWT no localStorage para futuras requisições
+    localStorage.setItem("userData", JSON.stringify(data));
+
+    // Atualiza o estado para indicar que o usuário está autenticado
+    setIsAuthenticated(true);
+  };
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, login, googleLogin, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

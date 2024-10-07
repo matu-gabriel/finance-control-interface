@@ -32,6 +32,14 @@ export const ContainerForm = styled.div`
   }
 `;
 
+export const GoogleButtonContainer = styled.div`
+  width: 100%;
+  /* max-width: 300px; */
+  margin: 1rem auto;
+  display: flex;
+  justify-content: center;
+`;
+
 export const Link = styled(LinkReact)`
   text-decoration: none;
 `;
