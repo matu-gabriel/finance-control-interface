@@ -61,7 +61,7 @@ export function Login() {
 
   return (
     <Container>
-      <img src={Logo} alt="Logo" style={{ height: "300px" }} />
+      <img src={Logo} alt="Logo" style={{ height: "220px" }} />
       <ContainerForm>
         <Title
           title="Login"

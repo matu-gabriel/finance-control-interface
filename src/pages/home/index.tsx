@@ -23,6 +23,7 @@ import { CreateTransactionDialog } from "../../components/create-transaction-dia
 import { Logo } from "../../components/logo";
 import { CategoriesChart } from "../../components/categories-chart";
 import { FinancialEvolutionBar } from "../../components/financial-evolution-bar";
+import { LogoutDropDown } from "../../components/dropDown";
 
 export function Home() {
   return (
@@ -32,6 +33,7 @@ export function Home() {
         <div>
           <CreateTransactionDialog />
           <CreateCategoryDialog />
+          <LogoutDropDown />
         </div>
       </Header>
       <Main>
