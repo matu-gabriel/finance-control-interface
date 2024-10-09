@@ -62,7 +62,7 @@ export const createTransactionSchema = z.object({
   date: z.string().regex(/^(0[1-9]|[12][0-9]|3[01]\/0[0-9]|1[0-2]\/\d{4}$)/, {
     message: "Data inválida",
   }),
-  type: z.enum(["income", "expense"], {
+  type: z.enum(["receita", "despesa"], {
     errorMap: () => ({ message: "Selecione um tipo válido" }),
   }),
 });
