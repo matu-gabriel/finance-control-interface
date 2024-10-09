@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Dialog } from "../dialog";
 import { Button } from "../button";
 import { Title } from "../title";
@@ -12,9 +12,15 @@ import {
   RadioGroup,
 } from "./style";
 import { InputMask } from "@react-input/mask";
+import { useFetchAPI } from "../../hooks/useFetchAPI";
 
 export function CreateTransactionDialog() {
+  const { categories, fetchCategories } = useFetchAPI();
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
 
   const handleClose = useCallback(() => {
     setOpen(false);
@@ -41,6 +47,12 @@ export function CreateTransactionDialog() {
               <label>Categoria</label>
               <select>
                 <option value="null">Selecione uma categoria...</option>
+                {categories?.length &&
+                  categories.map((category) => (
+                    <option key={category._id} value={category._id}>
+                      {category.title}
+                    </option>
+                  ))}
               </select>
             </InputGroup>
             <Input label="Nome" placeholder="Nome da transação..." />

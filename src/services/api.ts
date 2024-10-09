@@ -7,13 +7,34 @@ export class APIService {
     baseURL: import.meta.env.VITE_API_URL,
   });
 
+  static setupInterceptor() {
+    APIService.client.interceptors.request.use(
+      (config) => {
+        const userData = localStorage.getItem("userData");
+
+        if (userData) {
+          const parsedUserData = JSON.parse(userData);
+          const token = parsedUserData?.token;
+          if (token) {
+            config.headers["Authorization"] = `Bearer ${token}`;
+          }
+        }
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      }
+    );
+  }
+
   static async createCategory(
     createCategoryData: CreateCategory
   ): Promise<Category> {
     const { data } = await APIService.client.post<Category>(
-      "/categories",
+      "/category",
       createCategoryData
     );
+    console.log(data);
 
     return data;
   }
