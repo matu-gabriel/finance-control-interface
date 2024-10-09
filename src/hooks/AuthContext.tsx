@@ -6,8 +6,17 @@ import {
   useState,
 } from "react";
 
+type UserType = {
+  id: string;
+  name: string;
+  email: string;
+  token: string;
+  picture?: string; // A URL da foto de perfil é opcional
+};
+
 type AuthContextType = {
   isAuthenticated: boolean;
+  user: UserType | null;
   login: (email: string, password: string) => Promise<void>;
   googleLogin: (googleToken: string) => Promise<void>;
   logout: () => void;
@@ -25,10 +34,16 @@ export const AuthProvider = ({ children }: AuthPrioviderProps) => {
     return !!userData;
   });
 
+  const [user, setUser] = useState<UserType | null>(() => {
+    const userData = localStorage.getItem("userData");
+    return userData ? JSON.parse(userData) : null;
+  });
+
   useEffect(() => {
     const userData = localStorage.getItem("userData");
     if (userData) {
       setIsAuthenticated(true);
+      setUser(JSON.parse(userData));
     }
   }, []);
 
@@ -52,11 +67,13 @@ export const AuthProvider = ({ children }: AuthPrioviderProps) => {
 
     // Atualiza o estado para indicar que o usuário está autenticado
     setIsAuthenticated(true);
+    setUser(data);
   };
 
   const logout = async () => {
     await localStorage.removeItem("userData");
     setIsAuthenticated(false);
+    setUser(null);
   };
 
   const googleLogin = async (googleToken: string) => {
@@ -79,11 +96,12 @@ export const AuthProvider = ({ children }: AuthPrioviderProps) => {
 
     // Atualiza o estado para indicar que o usuário está autenticado
     setIsAuthenticated(true);
+    setUser(data);
   };
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, login, googleLogin, logout }}
+      value={{ isAuthenticated, login, googleLogin, logout, user }}
     >
       {children}
     </AuthContext.Provider>
