@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 export function LogoutDropDown() {
   const [isOpen, setIsOpen] = useState(false);
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const navigate = useNavigate();
 
   const handleToggleDropDown = () => {
@@ -26,7 +26,17 @@ export function LogoutDropDown() {
   return (
     <DropDownContainer>
       <IconButton onClick={handleToggleDropDown}>
-        <UserCircle size={54} color="white" cursor="pointer" />
+        {user?.picture ? (
+          <img
+            src={user.picture}
+            alt={user.name}
+            width={40}
+            height={40}
+            style={{ borderRadius: "50%" }}
+          />
+        ) : (
+          <UserCircle size={54} />
+        )}
       </IconButton>
 
       {isOpen && (

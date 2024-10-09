@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { theme } from "../../styles/theme";
 
 export const DropDownContainer = styled.div`
   position: relative;
@@ -8,20 +9,20 @@ export const IconButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  color: #fff; /* Cor do ícone */
+  color: ${theme.colors.white};
   padding: 0.5rem;
 
   &:hover {
-    color: #ddd; /* Cor ao passar o mouse */
+    color: ${theme.colors.light};
   }
 `;
 
 export const DropdownMenu = styled.div`
   position: absolute;
-  top: 100%; /* Para posicionar abaixo do botão */
+  top: 100%;
   right: 0;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: ${theme.colors.white};
+  border: 1px solid ${theme.colors.light};
   border-radius: 0.25rem;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
   z-index: 10;
@@ -34,6 +35,6 @@ export const DropdownItem = styled.div`
   color: #333;
 
   &:hover {
-    background-color: #f0f0f0;
+    background-color: ${theme.colors.white};
   }
 `;
