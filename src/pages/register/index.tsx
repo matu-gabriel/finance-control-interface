@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { userSchema } from "../../validators/schemas";
 import { useEffect } from "react";
 import { useAuth } from "../../hooks/AuthContext";
+import axios from "axios";
 
 export function Register() {
   const navigate = useNavigate();
@@ -29,8 +30,10 @@ export function Register() {
       await APIService.register(data);
       navigate("/login");
     } catch (error) {
-      console.error("Erro no registro:", error);
-      alert("Erro no registro. Verifique os dados e tente novamente.");
+      if (axios.isAxiosError(error) && error.response) {
+        const message = error.response.data.message || "Erro no registro";
+        alert(message);
+      }
     }
   };
 
