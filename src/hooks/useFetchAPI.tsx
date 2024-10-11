@@ -6,11 +6,13 @@ import {
   useState,
 } from "react";
 import { Category } from "../services/api-types";
-import { CreateCategoryData } from "../validators/types";
+import { CreateCategoryData, CreateTransactionData } from "../validators/types";
 import { APIService } from "../services/api";
+import { formatDate } from "../utils/formatDate";
 
 interface FetchAPIProps {
   createCategory: (data: CreateCategoryData) => Promise<void>;
+  createTransaction: (data: CreateTransactionData) => Promise<void>;
   fetchCategories: () => Promise<void>;
   categories: Category[];
 }
@@ -28,6 +30,14 @@ export function FetchAPIProvider({ children }: FetchAPIProviderProps) {
     await APIService.createCategory(data);
   }, []);
 
+  const createTransaction = useCallback(async (data: CreateTransactionData) => {
+    await APIService.createTransaction({
+      ...data,
+      date: formatDate(data.date),
+      amount: Number(data.amount.replace(/[^0-9]/g, "")),
+    });
+  }, []);
+
   const fetchCategories = useCallback(async () => {
     const data = await APIService.getCategories();
 
@@ -36,7 +46,7 @@ export function FetchAPIProvider({ children }: FetchAPIProviderProps) {
 
   return (
     <FetchAPIContext.Provider
-      value={{ categories, createCategory, fetchCategories }}
+      value={{ categories, createCategory, fetchCategories, createTransaction }}
     >
       {children}
     </FetchAPIContext.Provider>

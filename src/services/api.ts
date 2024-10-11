@@ -1,5 +1,10 @@
 import axios from "axios";
-import { Category, CreateCategory } from "./api-types";
+import {
+  Category,
+  CreateCategory,
+  CreateTransaction,
+  Transaction,
+} from "./api-types";
 import { CreateUserData } from "../validators/types";
 
 export class APIService {
@@ -25,6 +30,16 @@ export class APIService {
         return Promise.reject(error);
       }
     );
+  }
+
+  static async createTransaction(
+    createTransactionData: CreateTransaction
+  ): Promise<Transaction> {
+    const { data } = await APIService.client.post<Transaction>(
+      "/transaction",
+      createTransactionData
+    );
+    return data;
   }
 
   static async createCategory(
