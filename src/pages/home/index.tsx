@@ -21,11 +21,62 @@ import { Transaction } from "../../components/transaction";
 import { CreateCategoryDialog } from "../../components/create-category-dialog";
 import { CreateTransactionDialog } from "../../components/create-transaction-dialog";
 import { Logo } from "../../components/logo";
-import { CategoriesChart } from "../../components/categories-chart";
+import {
+  CategoriesChart,
+  CategoryProps,
+} from "../../components/categories-chart";
 import { FinancialEvolutionBar } from "../../components/financial-evolution-bar";
 import { LogoutDropDown } from "../../components/dropDown";
+import { useForm } from "react-hook-form";
+import { TransactionsFilterData } from "../../validators/types";
+import dayjs from "dayjs";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { transactionsFilterSchema } from "../../validators/schemas";
+import { useCallback, useEffect, useState } from "react";
+import { useFetchAPI } from "../../hooks/useFetchAPI";
 
 export function Home() {
+  const transactionFilterForm = useForm<TransactionsFilterData>({
+    defaultValues: {
+      title: "",
+      categoryId: "",
+      startDate: dayjs().startOf("month").format("DD/MM/YYYY"),
+      endDate: dayjs().endOf("month").format("DD/MM/YYYY"),
+    },
+    resolver: zodResolver(transactionsFilterSchema),
+  });
+
+  const { transactions, fetchTransactions } = useFetchAPI();
+
+  useEffect(() => {
+    fetchTransactions(transactionFilterForm.getValues());
+  }, [fetchTransactions, transactionFilterForm]);
+
+  const [selectedCategory, setSelectedCategory] =
+    useState<CategoryProps | null>(null);
+
+  const handleSelectCategory = useCallback(
+    ({ id, title, color }: CategoryProps) => {
+      setSelectedCategory({ id, title, color });
+      transactionFilterForm.setValue("categoryId", id);
+    },
+    [transactionFilterForm]
+  );
+
+  const handleDeselectCategory = useCallback(() => {
+    setSelectedCategory(null);
+    transactionFilterForm.setValue("categoryId", "");
+  }, [transactionFilterForm]);
+
+  const onSubmitTransactions = useCallback(
+    async (data: TransactionsFilterData) => {
+      console.log("Dados enviados:", data); // Verifique se as datas estão corretas
+      await fetchTransactions(data);
+      console.log("Teste");
+    },
+    [fetchTransactions]
+  );
+
   return (
     <>
       <Header>
@@ -48,6 +99,7 @@ export function Home() {
                 variant="dark"
                 label="Início"
                 placeholder="dd/mm/aaaa"
+                {...transactionFilterForm.register("startDate")}
               />
               <InputMask
                 component={Input}
@@ -56,8 +108,13 @@ export function Home() {
                 variant="dark"
                 label="Fim"
                 placeholder="dd/mm/aaaa"
+                {...transactionFilterForm.register("endDate")}
               />
-              <ButtonIncon />
+              <ButtonIncon
+                onClick={transactionFilterForm.handleSubmit(
+                  onSubmitTransactions
+                )}
+              />
             </InputGroup>
           </Filters>
           <Balance>
@@ -73,7 +130,7 @@ export function Home() {
               />
             </header>
             <ChartContent>
-              <CategoriesChart />
+              <CategoriesChart onClick={handleSelectCategory} />
             </ChartContent>
           </ChartContainer>
           <ChartContainer>
@@ -103,39 +160,40 @@ export function Home() {
           <header>
             <Title title="Transações" subtitle="Receita e Gastos no período" />
             <SearchTransaction>
-              <Input variant="black" placeholder="Procurar transação" />
-              <ButtonIncon />
+              <Input
+                variant="black"
+                placeholder="Procurar transação"
+                {...transactionFilterForm.register("title")}
+              />
+              <ButtonIncon
+                onClick={transactionFilterForm.handleSubmit(
+                  onSubmitTransactions
+                )}
+              />
             </SearchTransaction>
           </header>
           <TransactionGroup>
-            <Transaction
-              id={1}
-              title="Mercado"
-              amount={20000}
-              date="09/09/2024"
-              category={{ title: "Alimentação", color: "#0f0f" }}
-            />
-            <Transaction
-              id={1}
-              title="Mercado"
-              amount={20000}
-              date="09/09/2024"
-              category={{ title: "Alimentação", color: "#0f0f" }}
-            />
-            <Transaction
-              id={1}
-              title="Mercado"
-              amount={20000}
-              date="09/09/2024"
-              category={{ title: "Alimentação", color: "#0f0f" }}
-            />
-            <Transaction
-              id={1}
-              title="Mercado"
-              amount={20000}
-              date="09/09/2024"
-              category={{ title: "Alimentação", color: "#0f0f" }}
-            />
+            {transactions?.length &&
+              transactions.map((transaction, index) => (
+                <Transaction
+                  key={transaction._id}
+                  id={index + 1}
+                  title={transaction.title}
+                  amount={
+                    transaction.type === "despesa"
+                      ? transaction.amount * -1
+                      : transaction.amount
+                  }
+                  date={dayjs(transaction.date)
+                    .add(3, "hours")
+                    .format("DD/MM/YYYY")}
+                  category={{
+                    title: transaction.category.title,
+                    color: transaction.category.color,
+                  }}
+                  variant={transaction.type}
+                />
+              ))}
           </TransactionGroup>
         </Aside>
       </Main>

@@ -4,6 +4,7 @@ import {
   CreateCategory,
   CreateTransaction,
   Transaction,
+  TransactionFilter,
 } from "./api-types";
 import { CreateUserData } from "../validators/types";
 
@@ -38,6 +39,26 @@ export class APIService {
     const { data } = await APIService.client.post<Transaction>(
       "/transaction",
       createTransactionData
+    );
+    return data;
+  }
+
+  static async getTransactions({
+    title,
+    categoryId,
+    startDate,
+    endDate,
+  }: TransactionFilter): Promise<Transaction[]> {
+    const { data } = await APIService.client.get<Transaction[]>(
+      "/transaction",
+      {
+        params: {
+          ...(title?.length && { title }),
+          ...(categoryId?.length && { categoryId }),
+          startDate,
+          endDate,
+        },
+      }
     );
     return data;
   }

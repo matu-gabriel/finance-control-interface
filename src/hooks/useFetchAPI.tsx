@@ -5,8 +5,12 @@ import {
   useContext,
   useState,
 } from "react";
-import { Category } from "../services/api-types";
-import { CreateCategoryData, CreateTransactionData } from "../validators/types";
+import { Category, Transaction } from "../services/api-types";
+import {
+  CreateCategoryData,
+  CreateTransactionData,
+  TransactionsFilterData,
+} from "../validators/types";
 import { APIService } from "../services/api";
 import { formatDate } from "../utils/formatDate";
 
@@ -14,6 +18,8 @@ interface FetchAPIProps {
   createCategory: (data: CreateCategoryData) => Promise<void>;
   createTransaction: (data: CreateTransactionData) => Promise<void>;
   fetchCategories: () => Promise<void>;
+  fetchTransactions: (filters: TransactionsFilterData) => Promise<void>;
+  transactions: Transaction[];
   categories: Category[];
 }
 
@@ -25,6 +31,7 @@ type FetchAPIProviderProps = {
 
 export function FetchAPIProvider({ children }: FetchAPIProviderProps) {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   const createCategory = useCallback(async (data: CreateCategoryData) => {
     await APIService.createCategory(data);
@@ -44,9 +51,29 @@ export function FetchAPIProvider({ children }: FetchAPIProviderProps) {
     setCategories(data);
   }, []);
 
+  const fetchTransactions = useCallback(
+    async (filters: TransactionsFilterData) => {
+      const transactions = await APIService.getTransactions({
+        ...filters,
+        startDate: formatDate(filters.startDate),
+        endDate: formatDate(filters.endDate),
+      });
+
+      setTransactions(transactions);
+    },
+    []
+  );
+
   return (
     <FetchAPIContext.Provider
-      value={{ categories, createCategory, fetchCategories, createTransaction }}
+      value={{
+        categories,
+        createCategory,
+        fetchCategories,
+        createTransaction,
+        fetchTransactions,
+        transactions,
+      }}
     >
       {children}
     </FetchAPIContext.Provider>

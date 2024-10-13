@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/AuthContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../../validators/schemas";
-import { GoogleLogin, googleLogout } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 
 export function Login() {
   const { login, isAuthenticated, googleLogin } = useAuth();

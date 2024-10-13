@@ -17,6 +17,13 @@ export type CreateTransaction = {
   date: string;
 };
 
+export type TransactionFilter = {
+  title?: string;
+  categoryId?: string;
+  startDate: string;
+  endDate: string;
+};
+
 export type Transaction = {
   _id: string;
   title: string;
