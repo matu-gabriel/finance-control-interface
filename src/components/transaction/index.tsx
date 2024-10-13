@@ -33,7 +33,7 @@ export function Transaction({
 
       <Content $variant={variant} $tagColor={category.color}>
         <strong>{formatCurrency(amount)}</strong>
-        <span>{category.title.toLocaleUpperCase()}</span>
+        <span>{category.title.toUpperCase()}</span>
       </Content>
     </Container>
   );
