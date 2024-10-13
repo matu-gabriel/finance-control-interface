@@ -46,11 +46,14 @@ export function Home() {
     resolver: zodResolver(transactionsFilterSchema),
   });
 
-  const { transactions, fetchTransactions } = useFetchAPI();
+  const { transactions, fetchTransactions, fetchDashboard, dashboard } =
+    useFetchAPI();
 
   useEffect(() => {
+    const { startDate, endDate } = transactionFilterForm.getValues();
+    fetchDashboard({ startDate, endDate });
     fetchTransactions(transactionFilterForm.getValues());
-  }, [fetchTransactions, transactionFilterForm]);
+  }, [fetchTransactions, transactionFilterForm, fetchDashboard]);
 
   const [selectedCategory, setSelectedCategory] =
     useState<CategoryProps | null>(null);
@@ -68,11 +71,18 @@ export function Home() {
     transactionFilterForm.setValue("categoryId", "");
   }, [transactionFilterForm]);
 
+  const onSubmitDashboard = useCallback(
+    async (data: TransactionsFilterData) => {
+      const { startDate, endDate } = data;
+      await fetchDashboard({ startDate, endDate });
+      await fetchTransactions(data);
+    },
+    [fetchDashboard, fetchTransactions]
+  );
+
   const onSubmitTransactions = useCallback(
     async (data: TransactionsFilterData) => {
-      console.log("Dados enviados:", data); // Verifique se as datas estão corretas
       await fetchTransactions(data);
-      console.log("Teste");
     },
     [fetchTransactions]
   );
@@ -111,16 +121,22 @@ export function Home() {
                 {...transactionFilterForm.register("endDate")}
               />
               <ButtonIncon
-                onClick={transactionFilterForm.handleSubmit(
-                  onSubmitTransactions
-                )}
+                onClick={transactionFilterForm.handleSubmit(onSubmitDashboard)}
               />
             </InputGroup>
           </Filters>
           <Balance>
-            <Card title="Saldo" amount={1000000} />
-            <Card title="Saldo" amount={1000000} variant="incomes" />
-            <Card title="Saldo" amount={1000000} variant="expenses" />
+            <Card title="Saldo" amount={dashboard?.balanço?.balanço || 0} />
+            <Card
+              title="Receitas"
+              amount={dashboard?.balanço?.receita || 0}
+              variant="incomes"
+            />
+            <Card
+              title="Despesas"
+              amount={dashboard?.balanço?.despesa * -1 || 0}
+              variant="expenses"
+            />
           </Balance>
           <ChartContainer>
             <header>

@@ -3,6 +3,8 @@ import {
   Category,
   CreateCategory,
   CreateTransaction,
+  Dashboard,
+  DashboardFilters,
   Transaction,
   TransactionFilter,
 } from "./api-types";
@@ -12,6 +14,22 @@ export class APIService {
   private static client = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
   });
+
+  static async getDashboard({
+    startDate,
+    endDate,
+  }: DashboardFilters): Promise<Dashboard> {
+    const { data } = await APIService.client.get<Dashboard>(
+      "/transaction/report",
+      {
+        params: {
+          startDate,
+          endDate,
+        },
+      }
+    );
+    return data;
+  }
 
   static setupInterceptor() {
     APIService.client.interceptors.request.use(
@@ -70,7 +88,6 @@ export class APIService {
       "/category",
       createCategoryData
     );
-    console.log(data);
 
     return data;
   }

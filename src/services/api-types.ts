@@ -32,3 +32,27 @@ export type Transaction = {
   date: Date;
   category: Category;
 };
+
+export type Balance = {
+  _id: string | null;
+  receita: number;
+  despesa: number;
+  balanço: number;
+};
+
+export type Expense = {
+  _id: string;
+  title: string;
+  amount: number;
+  color: string;
+};
+
+export type Dashboard = {
+  balanço: Balance;
+  // despesa: Expense[];
+};
+
+export type DashboardFilters = {
+  startDate: string;
+  endDate: string;
+};
