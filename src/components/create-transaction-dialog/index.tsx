@@ -99,6 +99,7 @@ export function CreateTransactionDialog() {
                 placeholder="R$ 0,00"
                 format="currency"
                 currency="BRL"
+                locales="pt-BR"
                 {...register("amount")}
               />
               {errors.amount && (
