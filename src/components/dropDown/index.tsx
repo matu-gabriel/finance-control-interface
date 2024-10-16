@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   DropDownContainer,
   DropdownItem,
@@ -23,21 +23,23 @@ export function LogoutDropDown() {
     navigate("/login");
   };
 
+  const userPicture = useMemo(() => {
+    return user?.picture ? (
+      <img
+        src={user.picture}
+        alt={user.name}
+        width={40}
+        height={40}
+        style={{ borderRadius: "50%" }}
+      />
+    ) : (
+      <UserCircle size={54} />
+    );
+  }, [user?.name, user?.picture]);
+
   return (
     <DropDownContainer>
-      <IconButton onClick={handleToggleDropDown}>
-        {user?.picture ? (
-          <img
-            src={user.picture}
-            alt={user.name}
-            width={40}
-            height={40}
-            style={{ borderRadius: "50%" }}
-          />
-        ) : (
-          <UserCircle size={54} />
-        )}
-      </IconButton>
+      <IconButton onClick={handleToggleDropDown}>{userPicture}</IconButton>
 
       {isOpen && (
         <DropdownMenu>
