@@ -49,7 +49,7 @@ export type Expense = {
 
 export type Dashboard = {
   balanço: Balance;
-  // despesa: Expense[];
+  despesa: Expense[];
 };
 
 export type DashboardFilters = {

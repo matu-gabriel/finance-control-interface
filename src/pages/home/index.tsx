@@ -4,6 +4,7 @@ import { Title } from "../../components/title";
 import {
   Aside,
   Balance,
+  CategoryBadge,
   ChartAction,
   ChartContainer,
   ChartContent,
@@ -34,6 +35,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { transactionsFilterSchema } from "../../validators/schemas";
 import { useCallback, useEffect, useState } from "react";
 import { useFetchAPI } from "../../hooks/useFetchAPI";
+import { X } from "@phosphor-icons/react";
 
 export function Home() {
   const transactionFilterForm = useForm<TransactionsFilterData>({
@@ -59,17 +61,20 @@ export function Home() {
     useState<CategoryProps | null>(null);
 
   const handleSelectCategory = useCallback(
-    ({ id, title, color }: CategoryProps) => {
+    async ({ id, title, color }: CategoryProps) => {
       setSelectedCategory({ id, title, color });
       transactionFilterForm.setValue("categoryId", id);
+
+      await fetchTransactions(transactionFilterForm.getValues());
     },
-    [transactionFilterForm]
+    [transactionFilterForm, fetchTransactions]
   );
 
-  const handleDeselectCategory = useCallback(() => {
+  const handleDeselectCategory = useCallback(async () => {
     setSelectedCategory(null);
     transactionFilterForm.setValue("categoryId", "");
-  }, [transactionFilterForm]);
+    await fetchTransactions(transactionFilterForm.getValues());
+  }, [transactionFilterForm, fetchTransactions]);
 
   const onSubmitDashboard = useCallback(
     async (data: TransactionsFilterData) => {
@@ -86,6 +91,8 @@ export function Home() {
     },
     [fetchTransactions]
   );
+  console.log("Transactions ", transactions[1]?.category._id);
+  console.log(dashboard.despesa);
 
   return (
     <>
@@ -144,9 +151,21 @@ export function Home() {
                 title="Gastos"
                 subtitle="Despesas por categorias no período"
               />
+              {selectedCategory && (
+                <CategoryBadge
+                  $color={selectedCategory.color}
+                  onClick={handleDeselectCategory}
+                >
+                  <X />
+                  {selectedCategory.title.toUpperCase()}
+                </CategoryBadge>
+              )}
             </header>
             <ChartContent>
-              <CategoriesChart onClick={handleSelectCategory} />
+              <CategoriesChart
+                despesas={dashboard.despesa}
+                onClick={handleSelectCategory}
+              />
             </ChartContent>
           </ChartContainer>
           <ChartContainer>
