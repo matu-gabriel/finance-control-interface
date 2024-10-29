@@ -91,8 +91,6 @@ export function Home() {
     },
     [fetchTransactions]
   );
-  console.log("Transactions ", transactions[1]?.category._id);
-  console.log(dashboard.despesa);
 
   return (
     <>
@@ -163,7 +161,7 @@ export function Home() {
             </header>
             <ChartContent>
               <CategoriesChart
-                despesas={dashboard.despesa}
+                despesa={dashboard?.despesa}
                 onClick={handleSelectCategory}
               />
             </ChartContent>

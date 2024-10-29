@@ -20,25 +20,23 @@ type ChartData = {
 
 type CategoriesChartProps = {
   onClick: (category: CategoryProps) => void;
-  despesas?: Expense[];
+  despesa?: Expense[];
 };
 
-export function CategoriesChart({ onClick, despesas }: CategoriesChartProps) {
+export function CategoriesChart({ onClick, despesa }: CategoriesChartProps) {
   const data = useMemo<ChartData[]>(() => {
-    if (despesas?.length) {
-      const chartData = despesas.map((item) => ({
+    if (despesa?.length) {
+      const chartData = despesa.map((item) => ({
         id: item.title,
         label: item.title,
         externalId: item._id,
         value: item.amount,
         color: item.color,
       }));
-
-      console.log(chartData);
       return chartData;
     }
     return [];
-  }, [despesas]);
+  }, [despesa]);
 
   return (
     <ResponsivePie
