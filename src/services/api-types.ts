@@ -56,3 +56,14 @@ export type DashboardFilters = {
   startDate: string;
   endDate: string;
 };
+
+export type FinanceEvolutionFilters = {
+  year: string;
+};
+
+export type FinanceEvolution = {
+  _id: [number, number];
+  receita: number;
+  despesa: number;
+  balanço: number;
+};
