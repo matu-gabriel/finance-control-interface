@@ -29,10 +29,16 @@ import {
 import { FinancialEvolutionBar } from "../../components/financial-evolution-bar";
 import { LogoutDropDown } from "../../components/dropDown";
 import { useForm } from "react-hook-form";
-import { TransactionsFilterData } from "../../validators/types";
+import {
+  FinancialEvolutionFilterData,
+  TransactionsFilterData,
+} from "../../validators/types";
 import dayjs from "dayjs";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { transactionsFilterSchema } from "../../validators/schemas";
+import {
+  financeEvolutionFilterSchema,
+  transactionsFilterSchema,
+} from "../../validators/schemas";
 import { useCallback, useEffect, useState } from "react";
 import { useFetchAPI } from "../../hooks/useFetchAPI";
 import { X } from "@phosphor-icons/react";
@@ -46,6 +52,13 @@ export function Home() {
       endDate: dayjs().endOf("month").format("DD/MM/YYYY"),
     },
     resolver: zodResolver(transactionsFilterSchema),
+  });
+
+  const financeEvoltionFilterForm = useForm<FinancialEvolutionFilterData>({
+    defaultValues: {
+      year: dayjs().get("year").toString(),
+    },
+    resolver: zodResolver(financeEvolutionFilterSchema),
   });
 
   const { transactions, fetchTransactions, fetchDashboard, dashboard } =
@@ -175,11 +188,12 @@ export function Home() {
               <ChartAction>
                 <InputMask
                   component={Input}
-                  mask="dd/mm/aaaa"
-                  replacement={{ d: /\d/, m: /\d/, a: /\d/ }}
+                  mask="aaaa"
+                  replacement={{ a: /\d/ }}
                   variant="black"
-                  label="ano"
+                  label="Ano"
                   placeholder="aaaa"
+                  {...financeEvoltionFilterForm.register("year")}
                 />
                 <ButtonIncon />
               </ChartAction>

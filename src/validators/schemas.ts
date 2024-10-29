@@ -67,6 +67,6 @@ export const createTransactionSchema = z.object({
   }),
 });
 
-export const financialEvolutionFilterSchema = z.object({
+export const financeEvolutionFilterSchema = z.object({
   year: z.string().regex(/\d/, { message: "Digite um ano válido" }),
 });
