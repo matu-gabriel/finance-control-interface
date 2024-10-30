@@ -27,12 +27,12 @@ export const transactionsFilterSchema = z.object({
   categoryId: z.string().optional(),
   startDate: z
     .string()
-    .regex(/^(0[1-9]|[12][0-9]|3[01]\/0[1-9]|1[0-2]\/\d{4}$)/, {
+    .regex(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/, {
       message: "Data inválida",
     }),
   endDate: z
     .string()
-    .regex(/^(0[1-9]|[12][0-9]|3[01]\/0[1-9]|1[0-2]\/\d{4}$)/, {
+    .regex(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/, {
       message: "Data inválida",
     }),
 });
@@ -59,7 +59,7 @@ export const createTransactionSchema = z.object({
     .string()
     .min(1, { message: "Deve conter pelo menos 1 dígito" })
     .max(255),
-  date: z.string().regex(/^(0[1-9]|[12][0-9]|3[01]\/0[0-9]|1[0-2]\/\d{4}$)/, {
+  date: z.string().regex(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/, {
     message: "Data inválida",
   }),
   type: z.enum(["receita", "despesa"], {
