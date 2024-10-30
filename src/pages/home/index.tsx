@@ -61,14 +61,27 @@ export function Home() {
     resolver: zodResolver(financeEvolutionFilterSchema),
   });
 
-  const { transactions, fetchTransactions, fetchDashboard, dashboard } =
-    useFetchAPI();
+  const {
+    transactions,
+    fetchTransactions,
+    fetchDashboard,
+    dashboard,
+    financeEvolution,
+    fetchFinanceEvolution,
+  } = useFetchAPI();
 
   useEffect(() => {
     const { startDate, endDate } = transactionFilterForm.getValues();
     fetchDashboard({ startDate, endDate });
     fetchTransactions(transactionFilterForm.getValues());
-  }, [fetchTransactions, transactionFilterForm, fetchDashboard]);
+    fetchFinanceEvolution(financeEvoltionFilterForm.getValues());
+  }, [
+    fetchTransactions,
+    transactionFilterForm,
+    fetchDashboard,
+    fetchFinanceEvolution,
+    financeEvoltionFilterForm,
+  ]);
 
   const [selectedCategory, setSelectedCategory] =
     useState<CategoryProps | null>(null);
@@ -104,6 +117,15 @@ export function Home() {
     },
     [fetchTransactions]
   );
+
+  const onSubmitFinanceEvolution = useCallback(
+    async (data: FinanceEvolutionFilterData) => {
+      await fetchFinanceEvolution(data);
+    },
+    [fetchFinanceEvolution]
+  );
+
+  console.log(transactions);
 
   return (
     <>
@@ -195,14 +217,19 @@ export function Home() {
                   placeholder="aaaa"
                   {...financeEvoltionFilterForm.register("year")}
                 />
-                <ButtonIncon />
+                <ButtonIncon
+                  onClick={financeEvoltionFilterForm.handleSubmit(
+                    onSubmitFinanceEvolution
+                  )}
+                />
               </ChartAction>
             </header>
             <ChartContent>
-              <FinancialEvolutionBar />
+              <FinancialEvolutionBar financeEvolution={financeEvolution} />
             </ChartContent>
           </ChartContainer>
         </Section>
+
         <Aside>
           <header>
             <Title title="Transações" subtitle="Receita e Gastos no período" />
@@ -220,7 +247,7 @@ export function Home() {
             </SearchTransaction>
           </header>
           <TransactionGroup>
-            {transactions?.length &&
+            {transactions?.length > 0 &&
               transactions.map((transaction, index) => (
                 <Transaction
                   key={transaction._id}

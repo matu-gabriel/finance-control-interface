@@ -4,47 +4,9 @@ import dayjs from "dayjs";
 import ptBRLocale from "dayjs/locale/pt-br";
 import { theme } from "../../styles/theme";
 import { formatCurrency } from "../../utils/formatCurrency";
+import { FinanceEvolution } from "../../services/api-types";
 
 dayjs.locale(ptBRLocale);
-
-const apiData = [
-  {
-    _id: {
-      year: 2024,
-      month: 1,
-    },
-    balance: 68900,
-    receita: 36623,
-    despesas: 25242,
-  },
-  {
-    _id: {
-      year: 2024,
-      month: 2,
-    },
-    balance: 68900,
-    receita: 36623,
-    despesas: 25242,
-  },
-  {
-    _id: {
-      year: 2024,
-      month: 3,
-    },
-    balance: 68900,
-    receita: 36623,
-    despesas: 25242,
-  },
-  {
-    _id: {
-      year: 2024,
-      month: 4,
-    },
-    balance: 68900,
-    receita: 36623,
-    despesas: 25242,
-  },
-];
 
 type ChartData = {
   month: string;
@@ -53,17 +15,29 @@ type ChartData = {
   Despesas: number;
 };
 
-export function FinancialEvolutionBar() {
-  const data = useMemo<ChartData[]>(() => {
-    const chatData: ChartData[] = apiData.map((item) => ({
-      month: dayjs(`${item._id.year}-${item._id.month}-01`).format("MMM"),
-      Saldo: item.balance,
-      Receitas: item.receita,
-      Despesas: item.despesas,
-    }));
+type FinanceEolutionChartProps = {
+  financeEvolution?: FinanceEvolution[];
+};
 
-    return chatData;
-  }, []);
+export function FinancialEvolutionBar({
+  financeEvolution,
+}: FinanceEolutionChartProps) {
+  const data = useMemo<ChartData[]>(() => {
+    if (financeEvolution?.length) {
+      const chatData: ChartData[] = financeEvolution.map((item) => {
+        const [year, month] = item._id;
+        return {
+          month: dayjs(`${year}-${month}-01`).format("MMM"),
+          Saldo: item.balanço,
+          Receitas: item.receita,
+          Despesas: item.despesa,
+        };
+      });
+
+      return chatData;
+    }
+    return [];
+  }, [financeEvolution]);
 
   return (
     <ResponsiveBar
