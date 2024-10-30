@@ -30,7 +30,7 @@ import { FinancialEvolutionBar } from "../../components/financial-evolution-bar"
 import { LogoutDropDown } from "../../components/dropDown";
 import { useForm } from "react-hook-form";
 import {
-  FinancialEvolutionFilterData,
+  FinanceEvolutionFilterData,
   TransactionsFilterData,
 } from "../../validators/types";
 import dayjs from "dayjs";
@@ -54,7 +54,7 @@ export function Home() {
     resolver: zodResolver(transactionsFilterSchema),
   });
 
-  const financeEvoltionFilterForm = useForm<FinancialEvolutionFilterData>({
+  const financeEvoltionFilterForm = useForm<FinanceEvolutionFilterData>({
     defaultValues: {
       year: dayjs().get("year").toString(),
     },
