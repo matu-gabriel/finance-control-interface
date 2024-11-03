@@ -48,8 +48,9 @@ export const AuthProvider = ({ children }: AuthPrioviderProps) => {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const response = await fetch("http://localhost:3000/session", {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/session`, {
       method: "POST",
+      mode: "cors",
       headers: {
         "Content-Type": "application/json",
       },
@@ -77,13 +78,17 @@ export const AuthProvider = ({ children }: AuthPrioviderProps) => {
   };
 
   const googleLogin = async (googleToken: string) => {
-    const response = await fetch("http://localhost:3000/session-google", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ token: googleToken }),
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/session-google`,
+      {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token: googleToken }),
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Erro ao logar com Google");
