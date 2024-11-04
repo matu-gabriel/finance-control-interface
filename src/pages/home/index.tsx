@@ -125,8 +125,6 @@ export function Home() {
     [fetchFinanceEvolution]
   );
 
-  console.log(transactions);
-
   return (
     <>
       <Header>
