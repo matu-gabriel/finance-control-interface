@@ -13,6 +13,7 @@ import { useAuth } from "../../hooks/AuthContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../../validators/schemas";
 import { GoogleLogin } from "@react-oauth/google";
+import { toast } from "react-toastify";
 
 export function Login() {
   const { login, isAuthenticated, googleLogin } = useAuth();
@@ -35,7 +36,18 @@ export function Login() {
       return;
     }
     try {
-      await googleLogin(token);
+      await toast.promise(googleLogin(token), {
+        pending: "Logando...",
+        success: {
+          render() {
+            setTimeout(() => {
+              navigate("/");
+            }, 2000);
+            return "Logado com sucesso!";
+          },
+        },
+        error: "Erro ao logar",
+      });
       navigate("/");
     } catch (error) {
       setError("Erro ao fazer login com o Google.");
@@ -46,7 +58,18 @@ export function Login() {
   // Função chamada no submit do formulario
   const onSubmit = async (data: LoginUserData) => {
     try {
-      await login(data.email, data.password);
+      await toast.promise(login(data.email, data.password), {
+        pending: "Logando...",
+        success: {
+          render() {
+            setTimeout(() => {
+              navigate("/");
+            }, 2000);
+            return "Logado com sucesso!";
+          },
+        },
+        error: "Credenciais inválidas",
+      });
       navigate("/");
     } catch (err) {
       setError("Credenciais inválidas");

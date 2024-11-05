@@ -12,6 +12,7 @@ import { userSchema } from "../../validators/schemas";
 import { useEffect } from "react";
 import { useAuth } from "../../hooks/AuthContext";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export function Register() {
   const navigate = useNavigate();
@@ -27,7 +28,18 @@ export function Register() {
 
   const onSubmit = async (data: CreateUserData) => {
     try {
-      await APIService.register(data);
+      await toast.promise(APIService.register(data), {
+        pending: "Registrando...",
+        success: {
+          render() {
+            setTimeout(() => {
+              navigate("/login");
+            }, 2000);
+            return "Registrado com sucesso";
+          },
+        },
+        error: "Erro no registro",
+      });
       navigate("/login");
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
