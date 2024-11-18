@@ -16,7 +16,7 @@ export const Container = styled.div`
   footer {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: center;
     gap: 0.75rem;
   }
 `;
