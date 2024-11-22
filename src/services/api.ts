@@ -5,6 +5,7 @@ import {
   CreateTransaction,
   Dashboard,
   DashboardFilters,
+  EditTransaction,
   FinanceEvolution,
   FinanceEvolutionFilters,
   Transaction,
@@ -106,6 +107,23 @@ export class APIService {
     const { data } = await APIService.client.get<FinanceEvolution[]>(
       "/transaction/finance-evolution",
       { params: { year } }
+    );
+    return data;
+  }
+
+  static async editTransaction(
+    transactionId: string,
+    editTransactionData: EditTransaction
+  ): Promise<Transaction> {
+    const { title, amount, type, categoryId } = editTransactionData;
+    const { data } = await APIService.client.put<Transaction>(
+      `/transaction/${transactionId}`,
+      {
+        title,
+        amount,
+        type,
+        categoryId,
+      }
     );
     return data;
   }
