@@ -70,3 +70,25 @@ export const createTransactionSchema = z.object({
 export const financeEvolutionFilterSchema = z.object({
   year: z.string().regex(/\d/, { message: "Digite um ano válido" }),
 });
+
+export const editTransactionSchema = z.object({
+  categoryId: z
+    .string()
+    .regex(/^(?!null$)/g, { message: "Escolha uma categoria" })
+    .optional(),
+  title: z
+    .string()
+    .min(1, { message: "Deve conter pelo menos 1 caractere" })
+    .max(255)
+    .optional(),
+  amount: z
+    .string()
+    .min(1, { message: "Deve conter pelo menos 1 dígito" })
+    .max(255)
+    .optional(),
+  type: z
+    .enum(["receita", "despesa"], {
+      errorMap: () => ({ message: "Selecione um tipo válido" }),
+    })
+    .optional(),
+});

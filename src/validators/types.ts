@@ -2,6 +2,7 @@ import { z } from "zod";
 import {
   createCategorySchema,
   createTransactionSchema,
+  editTransactionSchema,
   financeEvolutionFilterSchema,
   loginSchema,
   transactionsFilterSchema,
@@ -21,3 +22,5 @@ export type TransactionsFilterData = z.infer<typeof transactionsFilterSchema>;
 export type FinanceEvolutionFilterData = z.infer<
   typeof financeEvolutionFilterSchema
 >;
+
+export type EditTransactionData = z.infer<typeof editTransactionSchema>;
