@@ -248,8 +248,9 @@ export function Home() {
             {transactions?.length > 0 &&
               transactions.map((transaction, index) => (
                 <Transaction
-                  key={transaction._id}
-                  id={index + 1}
+                  key={index}
+                  id={transaction._id}
+                  orderNumber={index + 1}
                   title={transaction.title}
                   amount={
                     transaction.type === "despesa"
@@ -260,8 +261,9 @@ export function Home() {
                     .add(3, "hours")
                     .format("DD/MM/YYYY")}
                   category={{
-                    title: transaction.category.title,
-                    color: transaction.category.color,
+                    _id: transaction.category?._id,
+                    title: transaction.category?.title,
+                    color: transaction.category?.color,
                   }}
                   variant={transaction.type}
                 />
