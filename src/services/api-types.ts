@@ -67,3 +67,10 @@ export type FinanceEvolution = {
   despesa: number;
   balanço: number;
 };
+
+export type EditTransaction = {
+  title?: string;
+  amount?: number;
+  categoryId?: string;
+  type?: "receita" | "despesa";
+};

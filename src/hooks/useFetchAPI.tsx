@@ -8,12 +8,14 @@ import {
 import {
   Category,
   Dashboard,
+  EditTransaction,
   FinanceEvolution,
   Transaction,
 } from "../services/api-types";
 import {
   CreateCategoryData,
   CreateTransactionData,
+  EditTransactionData,
   FinanceEvolutionFilterData,
   TransactionsFilterData,
 } from "../validators/types";
@@ -33,6 +35,10 @@ interface FetchAPIProps {
   categories: Category[];
   financeEvolution: FinanceEvolution[];
   fetchFinanceEvolution: (filter: FinanceEvolutionFilterData) => Promise<void>;
+  editTransaction: (
+    trasanctionId: string,
+    data: EditTransactionData
+  ) => Promise<void>;
 }
 
 const FetchAPIContext = createContext<FetchAPIProps>({} as FetchAPIProps);
@@ -104,6 +110,38 @@ export function FetchAPIProvider({ children }: FetchAPIProviderProps) {
     []
   );
 
+  const editTransaction = useCallback(
+    async (transactionId: string, data: EditTransactionData) => {
+      const editPayload: EditTransaction = {
+        title: data.title,
+        amount: data.amount
+          ? Number(data.amount.replace(/[^0-9]/g, ""))
+          : undefined,
+        type: data.type,
+        categoryId: data.categoryId,
+      };
+
+      try {
+        const updatedTransaction = await APIService.editTransaction(
+          transactionId,
+          editPayload
+        );
+
+        // Atualiza o estado diretamente sem perder a referência
+        setTransactions((prevTransactions) =>
+          prevTransactions.map((transaction) =>
+            transaction._id === transactionId
+              ? { ...transaction, ...updatedTransaction }
+              : transaction
+          )
+        );
+      } catch (error) {
+        console.error("Erro ao editar transação:", error);
+      }
+    },
+    []
+  );
+
   return (
     <FetchAPIContext.Provider
       value={{
@@ -117,6 +155,7 @@ export function FetchAPIProvider({ children }: FetchAPIProviderProps) {
         dashboard,
         fetchFinanceEvolution,
         financeEvolution,
+        editTransaction,
       }}
     >
       {children}
