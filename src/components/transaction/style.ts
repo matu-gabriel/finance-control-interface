@@ -17,6 +17,7 @@ export const Container = styled.div`
   justify-content: space-between;
   position: relative;
   padding: 0.75rem 0;
+  cursor: pointer;
 
   span {
     font-size: 0.75rem;
