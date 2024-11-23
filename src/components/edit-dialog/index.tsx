@@ -17,6 +17,8 @@ import { formatCurrency } from "../../utils/formatCurrency";
 import { EditTransactionData } from "../../validators/types";
 import { editTransactionSchema } from "../../validators/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "react-toastify";
+import { theme } from "../../styles/theme";
 
 type EditDialogProps = {
   handleClose: () => void;
@@ -37,7 +39,8 @@ export function EditDialog({
   transactionId,
   handleClose,
 }: EditDialogProps) {
-  const { fetchCategories, categories, editTransaction } = useFetchAPI();
+  const { fetchCategories, categories, editTransaction, deleteTransaction } =
+    useFetchAPI();
 
   const {
     control,
@@ -61,7 +64,16 @@ export function EditDialog({
   const onSubmit = useCallback(
     async (data: EditTransactionData) => {
       try {
-        await editTransaction(transactionId, data); // Certifique-se de que data.categoryId está correto
+        await toast.promise(editTransaction(transactionId, data), {
+          pending: "Editando transação...",
+          success: {
+            render() {
+              setTimeout(() => {}, 2000);
+              return "Transação editada com sucesso!";
+            },
+          },
+          error: "Erro ao editar transação",
+        }); // Certifique-se de que data.categoryId está correto
         handleClose(); // Fecha o modal
       } catch (error) {
         console.error("Erro ao editar transação:", error);
@@ -70,9 +82,18 @@ export function EditDialog({
     [transactionId, editTransaction, handleClose]
   );
 
-  // const onSubmit = (data) => {
-  //   console.log(data);
-  // };
+  const handleDelete = useCallback(async () => {
+    try {
+      await toast.promise(deleteTransaction(transactionId), {
+        pending: "Excluindo transação...",
+        success: "Transação excluída com sucesso!",
+        error: "Erro ao excluir transação",
+      });
+      handleClose();
+    } catch (error) {
+      console.error("Erro ao excluir transação:", error);
+    }
+  }, [transactionId, deleteTransaction, handleClose]);
 
   return (
     <Container>
@@ -158,8 +179,12 @@ export function EditDialog({
           </RadioForm>
         </Content>
         <footer>
-          <Button onClick={handleClose} variant="outline" type="button">
-            Cancelar
+          <Button
+            onClick={handleDelete}
+            type="button"
+            style={{ backgroundColor: theme.colors.error }}
+          >
+            Excluir
           </Button>
           <Button type="submit">Editar</Button>
         </footer>
