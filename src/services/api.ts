@@ -128,6 +128,15 @@ export class APIService {
     return data;
   }
 
+  static async deleteTransaction(transactionId: string): Promise<void> {
+    try {
+      await APIService.client.delete(`/transaction/${transactionId}`);
+    } catch (error) {
+      console.error("Erro na API ao excluir transação:", error);
+      throw new Error("Erro ao excluir transação.");
+    }
+  }
+
   // Função de registro
   static async register(registerData: CreateUserData): Promise<void> {
     await APIService.client.post("/user", registerData);
