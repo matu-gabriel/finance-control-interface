@@ -39,6 +39,7 @@ interface FetchAPIProps {
     trasanctionId: string,
     data: EditTransactionData
   ) => Promise<void>;
+  deleteTransaction: (transactionId: string) => Promise<void>;
 }
 
 const FetchAPIContext = createContext<FetchAPIProps>({} as FetchAPIProps);
@@ -142,6 +143,16 @@ export function FetchAPIProvider({ children }: FetchAPIProviderProps) {
     []
   );
 
+  const deleteTransaction = useCallback(async (transactionId: string) => {
+    try {
+      await APIService.deleteTransaction(transactionId);
+      console.log("Transação excluída com sucesso");
+    } catch (error) {
+      console.error("Erro ao excluir transação:", error);
+      throw error;
+    }
+  }, []);
+
   return (
     <FetchAPIContext.Provider
       value={{
@@ -156,6 +167,7 @@ export function FetchAPIProvider({ children }: FetchAPIProviderProps) {
         fetchFinanceEvolution,
         financeEvolution,
         editTransaction,
+        deleteTransaction,
       }}
     >
       {children}
