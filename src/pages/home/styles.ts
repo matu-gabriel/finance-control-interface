@@ -17,6 +17,25 @@ export const Header = styled.header`
     align-items: center;
     gap: 0.5rem;
   }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  @media (max-width: 620px) {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    text-align: center;
+
+    .dropdown {
+      /* display: none; */
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+  }
 `;
 
 export const Main = styled.main`
@@ -24,6 +43,11 @@ export const Main = styled.main`
   gap: 0.75rem;
   width: 100%;
   padding: 0 1.5rem 1.5rem 1.5rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
 `;
 
 export const Section = styled.section`
@@ -38,6 +62,12 @@ export const Filters = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
+
+  @media (max-width: 620px) {
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
 `;
 
 export const InputGroup = styled.div`
@@ -53,6 +83,12 @@ export const Balance = styled.div`
   align-items: center;
   gap: 0.75rem;
   width: 100%;
+
+  @media (max-width: 620px) {
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+  }
 `;
 
 export const ChartContainer = styled.div`
@@ -67,6 +103,11 @@ export const ChartContainer = styled.div`
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+  }
+
+  @media (max-width: 576px) {
+    padding: 0.5rem;
+    gap: 0.5rem;
   }
 `;
 
@@ -94,6 +135,11 @@ export const Aside = styled.aside`
     display: flex;
     flex-direction: column;
     gap: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    min-width: 100%;
+    padding: 0.75rem;
   }
 `;
 
