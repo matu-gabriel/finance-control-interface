@@ -132,7 +132,9 @@ export function Home() {
         <div>
           <CreateTransactionDialog />
           <CreateCategoryDialog />
-          <LogoutDropDown />
+          <div className="dropdown">
+            <LogoutDropDown />
+          </div>
         </div>
       </Header>
       <Main>
