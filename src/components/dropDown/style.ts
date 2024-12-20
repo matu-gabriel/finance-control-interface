@@ -27,6 +27,11 @@ export const DropdownMenu = styled.div`
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
   z-index: 10;
   padding: 0.5rem 1rem;
+  opacity: 0.9;
+
+  &:hover {
+    opacity: 1;
+  }
 `;
 
 export const DropdownItem = styled.div`

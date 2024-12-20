@@ -23,6 +23,10 @@ export function LogoutDropDown() {
     navigate("/login");
   };
 
+  const handleManage = () => {
+    navigate("/manage");
+  };
+
   const userPicture = useMemo(() => {
     return user?.picture ? (
       <img
@@ -43,6 +47,7 @@ export function LogoutDropDown() {
 
       {isOpen && (
         <DropdownMenu>
+          <DropdownItem onClick={handleManage}>Gerenciar</DropdownItem>
           <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
         </DropdownMenu>
       )}
