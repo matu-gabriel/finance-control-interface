@@ -22,10 +22,10 @@ import { theme } from "../../styles/theme";
 
 type EditDialogProps = {
   handleClose: () => void;
-  transactionId: string;
-  title: string;
-  amount: number;
-  category: {
+  transactionId?: string;
+  title?: string;
+  amount?: number;
+  category?: {
     _id: string;
     title: string;
     color: string;
@@ -50,8 +50,8 @@ export function EditDialog({
   } = useForm<EditTransactionData>({
     defaultValues: {
       title: title,
-      amount: formatCurrency(amount),
-      categoryId: category._id,
+      amount: amount !== undefined ? formatCurrency(amount) : "",
+      categoryId: category ? category._id : "",
       type: "despesa",
     },
     resolver: zodResolver(editTransactionSchema),
@@ -63,35 +63,39 @@ export function EditDialog({
 
   const onSubmit = useCallback(
     async (data: EditTransactionData) => {
-      try {
-        await toast.promise(editTransaction(transactionId, data), {
-          pending: "Editando transação...",
-          success: {
-            render() {
-              setTimeout(() => {}, 2000);
-              return "Transação editada com sucesso!";
+      if (transactionId) {
+        try {
+          await toast.promise(editTransaction(transactionId, data), {
+            pending: "Editando transação...",
+            success: {
+              render() {
+                setTimeout(() => {}, 2000);
+                return "Transação editada com sucesso!";
+              },
             },
-          },
-          error: "Erro ao editar transação",
-        }); // Certifique-se de que data.categoryId está correto
-        handleClose(); // Fecha o modal
-      } catch (error) {
-        console.error("Erro ao editar transação:", error);
+            error: "Erro ao editar transação",
+          }); // Certifique-se de que data.categoryId está correto
+          handleClose(); // Fecha o modal
+        } catch (error) {
+          console.error("Erro ao editar transação:", error);
+        }
       }
     },
     [transactionId, editTransaction, handleClose]
   );
 
   const handleDelete = useCallback(async () => {
-    try {
-      await toast.promise(deleteTransaction(transactionId), {
-        pending: "Excluindo transação...",
-        success: "Transação excluída com sucesso!",
-        error: "Erro ao excluir transação",
-      });
-      handleClose();
-    } catch (error) {
-      console.error("Erro ao excluir transação:", error);
+    if (transactionId) {
+      try {
+        await toast.promise(deleteTransaction(transactionId), {
+          pending: "Excluindo transação...",
+          success: "Transação excluída com sucesso!",
+          error: "Erro ao excluir transação",
+        });
+        handleClose();
+      } catch (error) {
+        console.error("Erro ao excluir transação:", error);
+      }
     }
   }, [transactionId, deleteTransaction, handleClose]);
 
