@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 import { theme } from "../../styles/theme";
 
 type EditDialogProps = {
+  showDeleteButton?: boolean;
   handleClose: () => void;
   transactionId?: string;
   title?: string;
@@ -38,6 +39,7 @@ export function EditDialog({
   category,
   transactionId,
   handleClose,
+  showDeleteButton = true,
 }: EditDialogProps) {
   const { fetchCategories, categories, editTransaction, deleteTransaction } =
     useFetchAPI();
@@ -183,13 +185,15 @@ export function EditDialog({
           </RadioForm>
         </Content>
         <footer>
-          <Button
-            onClick={handleDelete}
-            type="button"
-            style={{ backgroundColor: theme.colors.error }}
-          >
-            Excluir
-          </Button>
+          {showDeleteButton && (
+            <Button
+              onClick={handleDelete}
+              type="button"
+              style={{ backgroundColor: theme.colors.error }}
+            >
+              Excluir
+            </Button>
+          )}
           <Button type="submit">Editar</Button>
         </footer>
       </form>
