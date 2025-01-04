@@ -14,7 +14,13 @@ import {
   SidebarNav,
   ViewModeButton,
 } from "./style";
-import { List, NotePencil, SquaresFour, Trash } from "@phosphor-icons/react";
+import {
+  ArrowLeft,
+  List,
+  NotePencil,
+  SquaresFour,
+  Trash,
+} from "@phosphor-icons/react";
 import { useFetchAPI } from "../../hooks/useFetchAPI";
 import dayjs from "dayjs";
 import { formatCurrency } from "../../utils/formatCurrency";
@@ -61,13 +67,21 @@ export function Manage() {
     }
   };
 
-  const {
-    categories,
-    fetchCategories,
-    transactions,
-    fetchTransactions,
-    fetchDashboard,
-  } = useFetchAPI();
+  const handleDeleteCategories = async (categoryId: string) => {
+    try {
+      await toast.promise(APIService.deleteCategory(categoryId), {
+        pending: "Deletando categoria...",
+        success: "Categoria deletada co sucesso!",
+        error: "Erro ao deletar categoria!",
+      });
+      fetchTransactions(transactionFilterForm.getValues());
+    } catch (error) {
+      console.error("Erro ao deletar categoria", error);
+    }
+  };
+
+  const { categories, fetchCategories, transactions, fetchTransactions } =
+    useFetchAPI();
 
   const transactionFilterForm = useForm<TransactionsFilterData>({
     defaultValues: {
@@ -92,25 +106,33 @@ export function Manage() {
     transactionFilterForm,
   ]);
 
-  const onSubmitDashboard = useCallback(
+  const onSubmit = useCallback(
     async (data: TransactionsFilterData) => {
-      const { startDate, endDate } = data;
-      await fetchDashboard({ startDate, endDate });
-      await fetchTransactions(data);
+      const teste = data;
+      // await fetchDashboard({ startDate, endDate });
+      await fetchTransactions(teste);
     },
-    [fetchDashboard, fetchTransactions]
+    [fetchTransactions]
   );
 
   return (
     <DashboardContainer>
       <Sidebar>
         <SidebarHeader>
-          <h1>Gerenciamento</h1>
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+            <button
+              style={{ background: "none", border: "none" }}
+              onClick={() => (window.location.href = "/")}
+            >
+              <ArrowLeft size={24} cursor={"pointer"} color="#fff" />
+            </button>
+            <h1>Gerenciamento</h1>
+          </div>
         </SidebarHeader>
         <SidebarNav>
           {[
-            { id: "categories", label: "Categories" },
-            { id: "transactions", label: "Transactions" },
+            { id: "categories", label: "Categorias" },
+            { id: "transactions", label: "Transações" },
           ].map((item) => (
             <SidebarButton
               key={item.id}
@@ -125,7 +147,12 @@ export function Manage() {
       </Sidebar>
       <MainContent>
         <Header>
-          <h2>Categories</h2>
+          {/* <h2>Categories</h2> */}
+          {activeSection === "categories" ? (
+            <h2>Categorias</h2>
+          ) : (
+            <h2>Transações</h2>
+          )}
           {activeSection === "transactions" && (
             <InputGroup>
               <InputMask
@@ -147,7 +174,7 @@ export function Manage() {
                 {...transactionFilterForm.register("endDate")}
               />
               <ButtonIncon
-                onClick={transactionFilterForm.handleSubmit(onSubmitDashboard)}
+                onClick={transactionFilterForm.handleSubmit(onSubmit)}
               />
             </InputGroup>
           )}
@@ -177,7 +204,10 @@ export function Manage() {
                     <button>
                       <NotePencil size={24} />
                     </button>
-                    <button className="delete">
+                    <button
+                      className="delete"
+                      onClick={() => handleDeleteCategories(category._id)}
+                    >
                       <Trash size={24} />
                     </button>
                   </ActionsContainer>
@@ -191,7 +221,9 @@ export function Manage() {
                 >
                   <CardContent>
                     <h3>{transaction.title}</h3>
-                    <p>{transaction.category.title}</p>
+                    {transaction.category && (
+                      <p>{transaction.category.title}</p>
+                    )}
                     <p>{dayjs(transaction.date).format("DD/MM/YYYY")}</p>
                     <p>{formatCurrency(transaction.amount)}</p>
                   </CardContent>
