@@ -137,6 +137,15 @@ export class APIService {
     }
   }
 
+  static async deleteCategory(categoryId: string): Promise<void> {
+    try {
+      await APIService.client.delete(`category/${categoryId}`);
+    } catch (error) {
+      console.error("Erro na API ao excluir categoria:", error);
+      throw new Error("Erro ao excluir categoria.");
+    }
+  }
+
   // Função de registro
   static async register(registerData: CreateUserData): Promise<void> {
     await APIService.client.post("/user", registerData);
