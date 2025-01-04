@@ -47,6 +47,7 @@ export function EditDialog({
   const {
     control,
     register,
+    setValue,
     formState: { errors },
     handleSubmit,
   } = useForm<EditTransactionData>({
@@ -62,6 +63,20 @@ export function EditDialog({
   useEffect(() => {
     fetchCategories();
   }, [fetchCategories]);
+
+  // Verifica se a categoria atual ainda existe e seleciona outra automaticamente, se necessário
+  useEffect(() => {
+    if (categories.length > 0) {
+      const categoryExists = categories.some(
+        (cat) => cat._id === category?._id
+      );
+
+      if (!categoryExists) {
+        console.log("Categoria atual foi excluída, atribuindo nova categoria");
+        setValue("categoryId", categories[0]._id);
+      }
+    }
+  }, [categories, category, setValue]);
 
   const onSubmit = useCallback(
     async (data: EditTransactionData) => {
@@ -148,10 +163,17 @@ export function EditDialog({
               render={({ field }) => (
                 <select
                   {...field}
-                  value={field.value || ""}
-                  onChange={(e) => field.onChange(e.target.value)}
+                  value={field.value || category?._id || ""}
+                  onChange={(e) => {
+                    const selectValue = e.target.value;
+                    if (selectValue) {
+                      field.onChange(selectValue);
+                    }
+                  }}
                 >
-                  {/* <option value="">Selecione uma categoria...</option> */}
+                  <option value="" disabled>
+                    Selecione uma categoria...
+                  </option>
                   {categories?.length &&
                     categories.map((categorie) => (
                       <option key={categorie._id} value={categorie._id}>
